@@ -1,0 +1,542 @@
+<!DOCTYPE html>
+<!-- Pagina de chat do Minguinho (Req 9.2): interface delicada, fofa e minimalista.
+     A logica de envio via fetch e o historico em memoria vivem no <script> ao final. -->
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Minguinho</title>
+
+  <!-- Fonte sem serifa arredondada, moderna e amigavel -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Quicksand:wght@400;500;600;700&display=swap"
+    rel="stylesheet"
+  />
+
+  <style>
+    /* ------------------------------------------------------------------
+       Paleta e tokens de cor: rosa pastel, rosa-claro, blush, branco quente
+       e creme. Centralizados em variaveis para manter consistencia visual.
+    ------------------------------------------------------------------ */
+    :root {
+      --fundo-externo: #fdfbf4;        /* quase branco, levemente amarelado */
+      --painel-branco: #fffdfb;        /* branco levemente quente da conversa */
+      --cabecalho-rosa: #fdeef1;       /* rosa muito suave, quase translucido */
+      --borda-rosa: #f6d3dc;           /* rosa-claro das bordas finas */
+      --linha-rosa: #f7dbe2;           /* linha separadora do cabecalho */
+      --balao-bot: #fce4ea;            /* rosa pastel muito suave */
+      --balao-usuario: #f4edf0;        /* rosa acinzentado muito claro */
+      --rosa-forte: #f4a9bd;           /* rosa pastel mais intenso (botao) */
+      --texto-rosa-escuro: #c04a63;    /* rosa-escuro puxando p/ vermelho queimado */
+      --texto-balao: #b65069;          /* texto do balao do bot */
+      --texto-usuario: #2d2a2e;        /* cinza muito escuro, quase preto */
+      --rosa-acinzentado: #c9a7b0;     /* horarios e placeholder */
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    html,
+    body {
+      height: 100%;
+    }
+
+    body {
+      font-family: "Quicksand", "Segoe UI", system-ui, -apple-system, sans-serif;
+      margin: 0;
+      background: var(--fundo-externo);
+      color: var(--texto-usuario);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 100vh;
+    }
+
+    /* ------------------------------------------------------------------
+       Painel principal da conversa: retangulo quase quadrado, ocupando
+       ~76% da largura e ~82% da altura, cantos bem arredondados, borda
+       fina rosa e sombra suave e difusa.
+    ------------------------------------------------------------------ */
+    .painel {
+      width: 76vw;
+      height: 82vh;
+      max-width: 900px;
+      max-height: 860px;
+      min-width: 320px;
+      background: var(--painel-branco);
+      border: 1px solid var(--borda-rosa);
+      border-radius: 34px;
+      box-shadow: 0 30px 70px -20px rgba(214, 150, 170, 0.35),
+        0 10px 30px -15px rgba(214, 150, 170, 0.25);
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+    }
+
+    /* ------------------------------------------------------------------
+       Cabecalho: faixa horizontal rosa suave, com o mascote a esquerda e
+       o nome Minguinho ao lado. Separado da conversa por uma linha fina.
+    ------------------------------------------------------------------ */
+    .cabecalho {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      padding: 22px 32px;
+      background: var(--cabecalho-rosa);
+      border-bottom: 1px solid var(--linha-rosa);
+    }
+
+    .cabecalho__nome {
+      margin: 0;
+      font-size: 2rem;
+      font-weight: 700;
+      letter-spacing: 0.3px;
+      color: var(--texto-rosa-escuro);
+    }
+
+    /* Mascote do cabecalho (tamanho maior) */
+    .mascote--cabecalho {
+      width: 64px;
+      height: 64px;
+      flex: 0 0 auto;
+    }
+
+    /* ------------------------------------------------------------------
+       Area de mensagens: ocupa quase todo o painel, fundo branco quente,
+       bastante espaco vazio para que a conversa seja o destaque.
+    ------------------------------------------------------------------ */
+    #historico {
+      flex: 1;
+      overflow-y: auto;
+      background: var(--painel-branco);
+      padding: 30px 34px;
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+
+    /* Barra de rolagem discreta e delicada */
+    #historico::-webkit-scrollbar {
+      width: 8px;
+    }
+    #historico::-webkit-scrollbar-thumb {
+      background: var(--borda-rosa);
+      border-radius: 8px;
+    }
+
+    /* Linha de uma mensagem do bot: avatar + balao lado a lado */
+    .linha-bot {
+      display: flex;
+      align-items: flex-start;
+      gap: 14px;
+      max-width: 72%;
+    }
+
+    /* Avatar circular com fundo rosa-claro e o mascote reduzido */
+    .avatar {
+      width: 52px;
+      height: 52px;
+      flex: 0 0 auto;
+      border-radius: 50%;
+      background: var(--cabecalho-rosa);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .avatar svg {
+      width: 38px;
+      height: 38px;
+    }
+
+    /* Balao de mensagem do bot: rosa pastel, sem contorno, bem arredondado */
+    .balao-bot {
+      background: var(--balao-bot);
+      color: var(--texto-balao);
+      border-radius: 22px;
+      padding: 16px 20px;
+      font-size: 1.05rem;
+      line-height: 1.5;
+      white-space: pre-wrap;
+      word-wrap: break-word;
+    }
+
+    /* Balao de mensagem do usuario: alinhado a direita, rosa acinzentado claro */
+    .linha-usuario {
+      display: flex;
+      justify-content: flex-end;
+    }
+
+    .balao-usuario {
+      background: var(--balao-usuario);
+      color: var(--texto-usuario);
+      border-radius: 22px;
+      padding: 13px 20px;
+      font-size: 1.02rem;
+      line-height: 1.4;
+      max-width: 60%;
+      white-space: pre-wrap;
+      word-wrap: break-word;
+    }
+
+    /* Horario abaixo dos baloes, pequeno e fino, rosa acinzentado */
+    .horario {
+      font-size: 0.78rem;
+      font-weight: 500;
+      color: var(--rosa-acinzentado);
+      margin: 2px 0 14px;
+    }
+
+    .horario--bot {
+      align-self: flex-start;
+      /* alinhado proximo a margem esquerda do balao (apos o avatar) */
+      margin-left: 66px;
+    }
+
+    .horario--usuario {
+      align-self: flex-end;
+    }
+
+    /* Balao de erro (reaproveita o visual, em tom suave) */
+    .balao-erro {
+      background: #fdecec;
+      color: #b4555f;
+      border: 1px solid #f6d2d2;
+    }
+
+    /* ------------------------------------------------------------------
+       Rodape com o campo de digitacao em formato de capsula, com botao
+       circular de envio a direita.
+    ------------------------------------------------------------------ */
+    .rodape {
+      padding: 20px 34px 30px;
+    }
+
+    .campo {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      background: var(--painel-branco);
+      border: 1px solid var(--borda-rosa);
+      border-radius: 999px;
+      padding: 8px 10px 8px 26px;
+    }
+
+    .campo:focus-within {
+      border-color: var(--rosa-forte);
+    }
+
+    #mensagem {
+      flex: 1;
+      border: none;
+      outline: none;
+      background: transparent;
+      font: inherit;
+      font-size: 1.05rem;
+      color: var(--texto-usuario);
+      padding: 12px 0;
+    }
+
+    #mensagem::placeholder {
+      color: var(--rosa-acinzentado);
+    }
+
+    /* Botao circular de envio, rosa pastel mais intenso, sem texto */
+    #enviar {
+      width: 56px;
+      height: 56px;
+      flex: 0 0 auto;
+      border: none;
+      border-radius: 50%;
+      background: var(--rosa-forte);
+      color: #ffffff;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: background 0.15s ease, transform 0.1s ease;
+    }
+
+    #enviar:hover {
+      background: #ef96ad;
+    }
+
+    #enviar:active {
+      transform: scale(0.95);
+    }
+
+    #enviar:disabled {
+      opacity: 0.6;
+      cursor: default;
+    }
+
+    #enviar svg {
+      width: 24px;
+      height: 24px;
+    }
+
+    /* Ajustes para telas menores: painel ocupa quase toda a tela */
+    @media (max-width: 640px) {
+      .painel {
+        width: 94vw;
+        height: 92vh;
+        border-radius: 26px;
+      }
+      .cabecalho {
+        padding: 18px 20px;
+      }
+      .cabecalho__nome {
+        font-size: 1.6rem;
+      }
+      #historico {
+        padding: 20px;
+      }
+      .linha-bot,
+      .balao-usuario {
+        max-width: 88%;
+      }
+      .rodape {
+        padding: 16px 18px 22px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <!-- ================================================================
+       Mascote do Minguinho, desenhado uma unica vez como SVG oculto e
+       reutilizado via <use>. Criatura arredondada tipo nuvenzinha fofa,
+       corpo branco rosado, contorno rosa medio, orelhinhas, olhos escuros,
+       bochechas rosadas, boquinha delicada e dois coracoes flutuando.
+  ================================================================= -->
+  <svg width="0" height="0" style="position: absolute" aria-hidden="true">
+    <defs>
+      <g id="mascote-minguinho">
+        <!-- coracoes flutuando proximos a cabeca -->
+        <path
+          d="M74 15c1.4-2.6 5-2.7 6.2 0 .9 2-.3 4.2-3.1 6.4-2.8-2.2-4-4.4-3.1-6.4z"
+          fill="#f48fb1"
+        />
+        <path
+          d="M82 24c1-1.9 3.6-2 4.5 0 .7 1.4-.2 3-2.2 4.6-2-1.6-2.9-3.2-2.3-4.6z"
+          fill="#f8a9c2"
+        />
+
+        <!-- orelhinhas arredondadas -->
+        <ellipse cx="32" cy="30" rx="9" ry="11" fill="#fff4f6" stroke="#ef9bb3" stroke-width="2.4" />
+        <ellipse cx="68" cy="30" rx="9" ry="11" fill="#fff4f6" stroke="#ef9bb3" stroke-width="2.4" />
+
+        <!-- corpo arredondado tipo nuvenzinha -->
+        <path
+          d="M50 26c15 0 27 11 27 25 0 13-11 22-27 22S23 64 23 51c0-14 12-25 27-25z"
+          fill="#fff4f6"
+          stroke="#ef9bb3"
+          stroke-width="2.6"
+        />
+
+        <!-- bochechas rosadas -->
+        <ellipse cx="36" cy="54" rx="6" ry="4" fill="#f8bcd0" opacity="0.85" />
+        <ellipse cx="64" cy="54" rx="6" ry="4" fill="#f8bcd0" opacity="0.85" />
+
+        <!-- olhinhos pequenos e escuros -->
+        <circle cx="41" cy="48" r="3.1" fill="#5b4149" />
+        <circle cx="59" cy="48" r="3.1" fill="#5b4149" />
+
+        <!-- boquinha delicada -->
+        <path
+          d="M46 55c1.6 1.8 6.4 1.8 8 0"
+          fill="none"
+          stroke="#c87f93"
+          stroke-width="2"
+          stroke-linecap="round"
+        />
+      </g>
+    </defs>
+  </svg>
+
+  <!-- Painel central da conversa -->
+  <main class="painel" role="main">
+    <!-- Cabecalho com mascote e nome -->
+    <header class="cabecalho">
+      <svg class="mascote--cabecalho" viewBox="0 0 100 85" aria-label="Mascote Minguinho">
+        <use href="#mascote-minguinho" />
+      </svg>
+      <h1 class="cabecalho__nome">Minguinho</h1>
+    </header>
+
+    <!-- Area de mensagens (Req 1.3). As duas mensagens iniciais sao estaticas;
+         as novas sao anexadas pelo script mantendo o mesmo visual. -->
+    <section id="historico" aria-live="polite" aria-label="Histórico de mensagens">
+      <!-- Mensagem do bot: avatar + balao -->
+      <div class="linha-bot">
+        <span class="avatar">
+          <svg viewBox="0 0 100 85" aria-hidden="true"><use href="#mascote-minguinho" /></svg>
+        </span>
+        <div class="balao-bot">Oi! Eu sou o Minguinho 💕
+Pode me chamar sempre que precisar
+de uma ajudinha. Estou por aqui!</div>
+      </div>
+      <span class="horario horario--bot">14:27</span>
+    </section>
+
+    <!-- Rodape com o campo de digitacao em capsula e botao circular de envio -->
+    <footer class="rodape">
+      <form id="formulario" class="campo">
+        <input
+          id="mensagem"
+          name="mensagem"
+          type="text"
+          autocomplete="off"
+          maxlength="2000"
+          placeholder="Digite sua mensagem..."
+          aria-label="Digite sua mensagem"
+        />
+        <button id="enviar" type="submit" aria-label="Enviar mensagem">
+          <!-- icone branco de aviao de papel apontando para a direita -->
+          <svg viewBox="0 0 24 24" aria-hidden="true">
+            <path d="M3 11.5 21 3l-8.5 18-2.3-7.2L3 11.5z" fill="#ffffff" />
+          </svg>
+        </button>
+      </form>
+    </footer>
+  </main>
+
+  <script>
+    // ================================================================
+    // Logica de chat do Minguinho
+    // - Faz POST /chat com Content-Type: application/json e corpo { "message": ... }
+    //   e le o campo "reply" da resposta.
+    // - Mantem o historico APENAS em memoria da pagina (array em JS).
+    //   NAO usa localStorage, cookies nem sessionStorage: ao recarregar
+    //   ou fechar a pagina, o historico e descartado (Req 1.5).
+    // - Anexa cada mensagem (usuario e bot) na ordem cronologica (Req 1.4).
+    // - Exibe de forma legivel os erros retornados pelo servidor (400/502).
+    // ================================================================
+
+    // Referencias aos elementos da pagina
+    const formulario = document.getElementById("formulario");
+    const campoMensagem = document.getElementById("mensagem");
+    const botaoEnviar = document.getElementById("enviar");
+    const areaHistorico = document.getElementById("historico");
+
+    // Historico em memoria: vive apenas enquanto a pagina esta aberta.
+    const historico = [];
+
+    // Devolve o horario atual no formato HH:MM para exibir sob a mensagem.
+    function horarioAgora() {
+      const agora = new Date();
+      const hh = String(agora.getHours()).padStart(2, "0");
+      const mm = String(agora.getMinutes()).padStart(2, "0");
+      return hh + ":" + mm;
+    }
+
+    // Anexa uma mensagem do bot (avatar + balao) e seu horario.
+    // tipo pode ser "bot" (normal) ou "erro" (visual suave de alerta).
+    function adicionarMensagemBot(texto, tipo) {
+      historico.push({ autor: "Minguinho", texto, tipo });
+
+      const linha = document.createElement("div");
+      linha.className = "linha-bot";
+
+      // Avatar circular com o mascote (reutiliza o SVG definido no topo)
+      const avatar = document.createElement("span");
+      avatar.className = "avatar";
+      avatar.innerHTML =
+        '<svg viewBox="0 0 100 85" aria-hidden="true"><use href="#mascote-minguinho" /></svg>';
+
+      // Balao de texto. Usamos textContent para tratar o conteudo como texto
+      // puro, evitando injecao de HTML/script.
+      const balao = document.createElement("div");
+      balao.className = "balao-bot" + (tipo === "erro" ? " balao-erro" : "");
+      balao.textContent = texto;
+
+      linha.appendChild(avatar);
+      linha.appendChild(balao);
+      areaHistorico.appendChild(linha);
+
+      const horario = document.createElement("span");
+      horario.className = "horario horario--bot";
+      horario.textContent = horarioAgora();
+      areaHistorico.appendChild(horario);
+
+      areaHistorico.scrollTop = areaHistorico.scrollHeight;
+    }
+
+    // Anexa uma mensagem do usuario (balao a direita) e seu horario.
+    function adicionarMensagemUsuario(texto) {
+      historico.push({ autor: "Você", texto, tipo: "usuario" });
+
+      const linha = document.createElement("div");
+      linha.className = "linha-usuario";
+
+      const balao = document.createElement("div");
+      balao.className = "balao-usuario";
+      balao.textContent = texto;
+
+      linha.appendChild(balao);
+      areaHistorico.appendChild(linha);
+
+      const horario = document.createElement("span");
+      horario.className = "horario horario--usuario";
+      horario.textContent = horarioAgora();
+      areaHistorico.appendChild(horario);
+
+      areaHistorico.scrollTop = areaHistorico.scrollHeight;
+    }
+
+    // Trata o envio do formulario
+    formulario.addEventListener("submit", async function (evento) {
+      evento.preventDefault();
+
+      // Remove espacos nas extremidades; nao envia mensagem vazia
+      const texto = campoMensagem.value.trim();
+      if (texto.length === 0) {
+        return;
+      }
+
+      // Anexa a mensagem do usuario (ordem cronologica)
+      adicionarMensagemUsuario(texto);
+
+      // Limpa o campo e desabilita os controles enquanto aguarda a resposta
+      campoMensagem.value = "";
+      campoMensagem.disabled = true;
+      botaoEnviar.disabled = true;
+
+      try {
+        const resposta = await fetch("/chat", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ message: texto }),
+        });
+
+        let dados = {};
+        try {
+          dados = await resposta.json();
+        } catch (erroJson) {
+          dados = {};
+        }
+
+        if (resposta.ok && dados.reply) {
+          adicionarMensagemBot(dados.reply, "bot");
+        } else {
+          const mensagemErro =
+            dados.error ||
+            "Ops! Algo deu errado ao falar com o Minguinho. Tente novamente em instantes.";
+          adicionarMensagemBot(mensagemErro, "erro");
+        }
+      } catch (erroRede) {
+        adicionarMensagemBot(
+          "Não consegui me conectar ao Minguinho. Verifique sua conexão e tente novamente.",
+          "erro"
+        );
+      } finally {
+        campoMensagem.disabled = false;
+        botaoEnviar.disabled = false;
+        campoMensagem.focus();
+      }
+    });
+  </script>
+</body>
+</html>

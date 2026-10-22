@@ -1,0 +1,285 @@
+{
+  "pbtResults": {},
+  "executionHistory": {
+    "1. Criar o arquivo de dependências do projeto": [
+      {
+        "executionId": "f81352b2-79d4-4143-8e74-4a2ac5c2cf29",
+        "chatSessionId": "sess_f0499f96-2119-4c50-9513-0471db722098",
+        "timestamp": 1792606313113
+      },
+      {
+        "executionId": "f81352b2-79d4-4143-8e74-4a2ac5c2cf29",
+        "chatSessionId": "sess_f0499f96-2119-4c50-9513-0471db722098",
+        "timestamp": 1792606319061
+      },
+      {
+        "executionId": "f81352b2-79d4-4143-8e74-4a2ac5c2cf29",
+        "chatSessionId": "sess_f0499f96-2119-4c50-9513-0471db722098",
+        "timestamp": 1792606374957
+      }
+    ],
+    "2.1 Criar o esqueleto do `app.py` e a configuração JSON/UTF-8": [
+      {
+        "executionId": "f81352b2-79d4-4143-8e74-4a2ac5c2cf29",
+        "chatSessionId": "sess_f0499f96-2119-4c50-9513-0471db722098",
+        "timestamp": 1792606313248
+      },
+      {
+        "executionId": "f81352b2-79d4-4143-8e74-4a2ac5c2cf29",
+        "chatSessionId": "sess_f0499f96-2119-4c50-9513-0471db722098",
+        "timestamp": 1792606378726
+      },
+      {
+        "executionId": "f81352b2-79d4-4143-8e74-4a2ac5c2cf29",
+        "chatSessionId": "sess_f0499f96-2119-4c50-9513-0471db722098",
+        "timestamp": 1792606440518
+      }
+    ],
+    "2.2 Definir a constante SYSTEM_PROMPT com a personalidade do Minguinho": [
+      {
+        "executionId": "f81352b2-79d4-4143-8e74-4a2ac5c2cf29",
+        "chatSessionId": "sess_f0499f96-2119-4c50-9513-0471db722098",
+        "timestamp": 1792606313310
+      },
+      {
+        "executionId": "f81352b2-79d4-4143-8e74-4a2ac5c2cf29",
+        "chatSessionId": "sess_f0499f96-2119-4c50-9513-0471db722098",
+        "timestamp": 1792606442986
+      },
+      {
+        "executionId": "f81352b2-79d4-4143-8e74-4a2ac5c2cf29",
+        "chatSessionId": "sess_f0499f96-2119-4c50-9513-0471db722098",
+        "timestamp": 1792606493489
+      }
+    ],
+    "2.3 Criar o cliente `bedrock-runtime` e a constante do Model ID": [
+      {
+        "executionId": "f81352b2-79d4-4143-8e74-4a2ac5c2cf29",
+        "chatSessionId": "sess_f0499f96-2119-4c50-9513-0471db722098",
+        "timestamp": 1792606313369
+      },
+      {
+        "executionId": "f81352b2-79d4-4143-8e74-4a2ac5c2cf29",
+        "chatSessionId": "sess_f0499f96-2119-4c50-9513-0471db722098",
+        "timestamp": 1792606495896
+      },
+      {
+        "executionId": "f81352b2-79d4-4143-8e74-4a2ac5c2cf29",
+        "chatSessionId": "sess_f0499f96-2119-4c50-9513-0471db722098",
+        "timestamp": 1792606545031
+      }
+    ],
+    "3.1 Montar o corpo de invocação e chamar `invoke_model`": [
+      {
+        "executionId": "f81352b2-79d4-4143-8e74-4a2ac5c2cf29",
+        "chatSessionId": "sess_f0499f96-2119-4c50-9513-0471db722098",
+        "timestamp": 1792606313437
+      },
+      {
+        "executionId": "f81352b2-79d4-4143-8e74-4a2ac5c2cf29",
+        "chatSessionId": "sess_f0499f96-2119-4c50-9513-0471db722098",
+        "timestamp": 1792606547725
+      },
+      {
+        "executionId": "f81352b2-79d4-4143-8e74-4a2ac5c2cf29",
+        "chatSessionId": "sess_f0499f96-2119-4c50-9513-0471db722098",
+        "timestamp": 1792606588203
+      }
+    ],
+    "3.2 Extrair o texto gerado da resposta do modelo": [
+      {
+        "executionId": "f81352b2-79d4-4143-8e74-4a2ac5c2cf29",
+        "chatSessionId": "sess_f0499f96-2119-4c50-9513-0471db722098",
+        "timestamp": 1792606313496
+      },
+      {
+        "executionId": "f81352b2-79d4-4143-8e74-4a2ac5c2cf29",
+        "chatSessionId": "sess_f0499f96-2119-4c50-9513-0471db722098",
+        "timestamp": 1792606590773
+      },
+      {
+        "executionId": "f81352b2-79d4-4143-8e74-4a2ac5c2cf29",
+        "chatSessionId": "sess_f0499f96-2119-4c50-9513-0471db722098",
+        "timestamp": 1792606640704
+      }
+    ],
+    "4.1 Renderizar a página de chat com tratamento de erro": [
+      {
+        "executionId": "f81352b2-79d4-4143-8e74-4a2ac5c2cf29",
+        "chatSessionId": "sess_f0499f96-2119-4c50-9513-0471db722098",
+        "timestamp": 1792606313566
+      },
+      {
+        "executionId": "f81352b2-79d4-4143-8e74-4a2ac5c2cf29",
+        "chatSessionId": "sess_f0499f96-2119-4c50-9513-0471db722098",
+        "timestamp": 1792606643513
+      },
+      {
+        "executionId": "f81352b2-79d4-4143-8e74-4a2ac5c2cf29",
+        "chatSessionId": "sess_f0499f96-2119-4c50-9513-0471db722098",
+        "timestamp": 1792606674334
+      }
+    ],
+    "5.1 Implementar a validação de entrada (400 sem chamar o Bedrock)": [
+      {
+        "executionId": "f81352b2-79d4-4143-8e74-4a2ac5c2cf29",
+        "chatSessionId": "sess_f0499f96-2119-4c50-9513-0471db722098",
+        "timestamp": 1792606313620
+      },
+      {
+        "executionId": "f81352b2-79d4-4143-8e74-4a2ac5c2cf29",
+        "chatSessionId": "sess_f0499f96-2119-4c50-9513-0471db722098",
+        "timestamp": 1792606676954
+      },
+      {
+        "executionId": "f81352b2-79d4-4143-8e74-4a2ac5c2cf29",
+        "chatSessionId": "sess_f0499f96-2119-4c50-9513-0471db722098",
+        "timestamp": 1792606720086
+      }
+    ],
+    "5.2 Encaminhar mensagem válida ao Bedrock e responder sucesso/falha": [
+      {
+        "executionId": "f81352b2-79d4-4143-8e74-4a2ac5c2cf29",
+        "chatSessionId": "sess_f0499f96-2119-4c50-9513-0471db722098",
+        "timestamp": 1792606313682
+      },
+      {
+        "executionId": "f81352b2-79d4-4143-8e74-4a2ac5c2cf29",
+        "chatSessionId": "sess_f0499f96-2119-4c50-9513-0471db722098",
+        "timestamp": 1792606722643
+      },
+      {
+        "executionId": "f81352b2-79d4-4143-8e74-4a2ac5c2cf29",
+        "chatSessionId": "sess_f0499f96-2119-4c50-9513-0471db722098",
+        "timestamp": 1792606765296
+      }
+    ],
+    "6.1 Verificar credenciais AWS no startup": [
+      {
+        "executionId": "f81352b2-79d4-4143-8e74-4a2ac5c2cf29",
+        "chatSessionId": "sess_f0499f96-2119-4c50-9513-0471db722098",
+        "timestamp": 1792606313742
+      },
+      {
+        "executionId": "f81352b2-79d4-4143-8e74-4a2ac5c2cf29",
+        "chatSessionId": "sess_f0499f96-2119-4c50-9513-0471db722098",
+        "timestamp": 1792606768189
+      },
+      {
+        "executionId": "f81352b2-79d4-4143-8e74-4a2ac5c2cf29",
+        "chatSessionId": "sess_f0499f96-2119-4c50-9513-0471db722098",
+        "timestamp": 1792606818705
+      }
+    ],
+    "6.2 Iniciar o servidor em localhost:5000 com tratamento de porta ocupada": [
+      {
+        "executionId": "f81352b2-79d4-4143-8e74-4a2ac5c2cf29",
+        "chatSessionId": "sess_f0499f96-2119-4c50-9513-0471db722098",
+        "timestamp": 1792606313804
+      },
+      {
+        "executionId": "f81352b2-79d4-4143-8e74-4a2ac5c2cf29",
+        "chatSessionId": "sess_f0499f96-2119-4c50-9513-0471db722098",
+        "timestamp": 1792606821811
+      },
+      {
+        "executionId": "f81352b2-79d4-4143-8e74-4a2ac5c2cf29",
+        "chatSessionId": "sess_f0499f96-2119-4c50-9513-0471db722098",
+        "timestamp": 1792606901958
+      }
+    ],
+    "7.1 Criar a estrutura e os controles da página de chat": [
+      {
+        "executionId": "f81352b2-79d4-4143-8e74-4a2ac5c2cf29",
+        "chatSessionId": "sess_f0499f96-2119-4c50-9513-0471db722098",
+        "timestamp": 1792606313870
+      },
+      {
+        "executionId": "f81352b2-79d4-4143-8e74-4a2ac5c2cf29",
+        "chatSessionId": "sess_f0499f96-2119-4c50-9513-0471db722098",
+        "timestamp": 1792606319780
+      },
+      {
+        "executionId": "f81352b2-79d4-4143-8e74-4a2ac5c2cf29",
+        "chatSessionId": "sess_f0499f96-2119-4c50-9513-0471db722098",
+        "timestamp": 1792606375736
+      }
+    ],
+    "7.2 Implementar o envio via fetch e o histórico cronológico em memória": [
+      {
+        "executionId": "f81352b2-79d4-4143-8e74-4a2ac5c2cf29",
+        "chatSessionId": "sess_f0499f96-2119-4c50-9513-0471db722098",
+        "timestamp": 1792606313932
+      },
+      {
+        "executionId": "f81352b2-79d4-4143-8e74-4a2ac5c2cf29",
+        "chatSessionId": "sess_f0499f96-2119-4c50-9513-0471db722098",
+        "timestamp": 1792606822799
+      },
+      {
+        "executionId": "f81352b2-79d4-4143-8e74-4a2ac5c2cf29",
+        "chatSessionId": "sess_f0499f96-2119-4c50-9513-0471db722098",
+        "timestamp": 1792606902648
+      }
+    ],
+    "8. Verificação manual final do fluxo completo": [
+      {
+        "executionId": "f81352b2-79d4-4143-8e74-4a2ac5c2cf29",
+        "chatSessionId": "sess_f0499f96-2119-4c50-9513-0471db722098",
+        "timestamp": 1792606313990
+      },
+      {
+        "executionId": "f81352b2-79d4-4143-8e74-4a2ac5c2cf29",
+        "chatSessionId": "sess_f0499f96-2119-4c50-9513-0471db722098",
+        "timestamp": 1792606906219
+      },
+      {
+        "executionId": "f81352b2-79d4-4143-8e74-4a2ac5c2cf29",
+        "chatSessionId": "sess_f0499f96-2119-4c50-9513-0471db722098",
+        "timestamp": 1792606967492
+      }
+    ],
+    "2. Estruturar o `app.py` com configuração base do Flask e integração Bedrock": [
+      {
+        "executionId": "f81352b2-79d4-4143-8e74-4a2ac5c2cf29",
+        "chatSessionId": "sess_f0499f96-2119-4c50-9513-0471db722098",
+        "timestamp": 1792606545121
+      }
+    ],
+    "3. Implementar a função de invocação do Bedrock e extração do texto": [
+      {
+        "executionId": "f81352b2-79d4-4143-8e74-4a2ac5c2cf29",
+        "chatSessionId": "sess_f0499f96-2119-4c50-9513-0471db722098",
+        "timestamp": 1792606640760
+      }
+    ],
+    "4. Implementar a rota raiz `GET /`": [
+      {
+        "executionId": "f81352b2-79d4-4143-8e74-4a2ac5c2cf29",
+        "chatSessionId": "sess_f0499f96-2119-4c50-9513-0471db722098",
+        "timestamp": 1792606674400
+      }
+    ],
+    "5. Implementar a rota `POST /chat`": [
+      {
+        "executionId": "f81352b2-79d4-4143-8e74-4a2ac5c2cf29",
+        "chatSessionId": "sess_f0499f96-2119-4c50-9513-0471db722098",
+        "timestamp": 1792606765366
+      }
+    ],
+    "6. Implementar a inicialização e o bloco de execução em `app.py`": [
+      {
+        "executionId": "f81352b2-79d4-4143-8e74-4a2ac5c2cf29",
+        "chatSessionId": "sess_f0499f96-2119-4c50-9513-0471db722098",
+        "timestamp": 1792606902022
+      }
+    ],
+    "7. Implementar a interface de chat em `templates/index.html`": [
+      {
+        "executionId": "f81352b2-79d4-4143-8e74-4a2ac5c2cf29",
+        "chatSessionId": "sess_f0499f96-2119-4c50-9513-0471db722098",
+        "timestamp": 1792606902702
+      }
+    ]
+  }
+}
